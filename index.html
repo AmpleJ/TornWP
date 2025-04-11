@@ -23,7 +23,6 @@
     }
     .container { max-width: 1100px; margin: auto; width: 100%; }
     h1 { text-align: center; margin-bottom: 0.5rem; color: var(--primary); }
-    
     .loading-overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background-color: rgba(0, 0, 0, 0.5); z-index: 1000;
@@ -35,25 +34,23 @@
       animation: spin 1s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    
     .panel {
       padding: 0.8rem; margin-bottom: 1rem; background-color: var(--header-bg);
       border-radius: 8px; display: flex; flex-wrap: wrap; justify-content: center;
       align-items: center; gap: 1rem;
     }
-    
-    .api-field { position: relative; }
-    .toggle-password {
-      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; color: var(--text); cursor: pointer;
+    .status {
+      text-align: center;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border-radius: 4px;
+      display: none;
     }
-    
-    input {
+    input, select {
       padding: 0.5rem; border: 1px solid var(--input-border);
       border-radius: 4px; background-color: var(--input-bg);
       color: var(--text); width: 220px; font-size: 16px;
     }
-    
     button {
       padding: 0.5rem 0.8rem; border: none; border-radius: 5px;
       cursor: pointer; font-size: 1rem; transition: all 0.2s;
@@ -61,65 +58,111 @@
     }
     button:hover { opacity: 0.9; transform: translateY(-2px); }
     button:active { transform: translateY(0); }
-    
     .btn-primary { background-color: var(--primary); }
-    .btn-success { background-color: var(--success); }
-    .btn-info { background-color: var(--info); }
-    .btn-warning { background-color: var(--warning); }
-    .btn-danger { background-color: var(--danger); }
     .btn-purple { background-color: var(--purple); }
-    .btn-gray { background-color: var(--gray); }
+    .btn-info { background-color: var(--info); }
     
-    .table-container { overflow-x: auto; margin-bottom: 1rem; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
-    th, td { border-bottom: 1px solid var(--border); padding: 0.5rem; text-align: center; }
+    /* Table styles */
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
     th {
-      background-color: var(--header-bg); position: sticky;
-      top: 0; z-index: 10;
+      background-color: var(--header-bg);
+      cursor: pointer;
+      user-select: none;
+      position: relative;
     }
-    tbody tr:nth-child(even) { background-color: var(--striped); }
-    
-    .playerName {
-      display: inline-block; min-width: 100px; padding: 0.5rem;
-      border-bottom: 1px dashed var(--border); cursor: text;
+    th:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: var(--striped);
+    }
+    .sort-icon::after {
+      content: '\25BC';
+      position: absolute;
+      right: 8px;
+      font-size: 0.8em;
+    }
+    .sort-icon.asc::after {
+      content: '\25B2';
+    }
+    .payout-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .copy-btn {
+      margin-left: auto;
+    }
+    .no-data {
+      text-align: center;
+      padding: 2rem;
+      font-style: italic;
+      color: var(--gray);
+    }
+    .progress-bar {
+      height: 8px;
+      background-color: var(--primary);
+      border-radius: 4px;
+      max-width: 100%;
     }
     
-    .player-tags { display: flex; gap: 0.3rem; flex-wrap: wrap; justify-content: center; }
-    .tag {
-      font-size: 0.7rem; padding: 0.2rem 0.4rem;
-      border-radius: 3px; font-weight: bold; color: white;
-    }
-    .tag-leader { background-color: var(--danger); }
-    .tag-coleader { background-color: var(--purple); }
-    .tag-officer { background-color: var(--info); }
-    .tag-member { background-color: var(--success); }
-    .tag-new { background-color: var(--warning); }
-    
-    .status {
-      margin: 1rem 0; padding: 0.8rem; border-radius: 8px;
-      background-color: var(--header-bg); text-align: center; display: none;
-    }
-    .status.success { background-color: rgba(76, 175, 80, 0.2); color: var(--success); display: block; }
-    .status.error { background-color: rgba(244, 67, 54, 0.2); color: var(--danger); display: block; }
-    
+    /* Responsive adjustments */
     @media (max-width: 768px) {
-      .panel { flex-direction: column; align-items: stretch; }
-      button, input { width: 100%; }
+      .panel, .payout-options {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      input, select {
+        width: 100%;
+      }
+      .copy-btn {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+
+    /* Dark mode detection */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #181818;
+        --text: #e0e0e0;
+        --border: #444;
+        --input-bg: #333;
+        --input-border: #555;
+        --header-bg: #2a2a40;
+        --striped: #252525;
+      }
     }
   </style>
 </head>
 <body>
   <div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div></div>
-
   <div class="container">
     <h1>Torn War Payout Calculator</h1>
     <div id="statusDisplay" class="status"></div>
     
     <div class="panel">
-      <div class="api-field">
+      <div>
         <label for="apiKeyInput">API Key:</label>
         <input type="password" id="apiKeyInput" placeholder="Enter your Torn API Key" />
-        <button type="button" class="toggle-password" onclick="toggleApiKey()">👁️</button>
       </div>
       <div>
         <label for="factionIdInput">Faction ID:</label>
@@ -135,369 +178,355 @@
     <div class="panel">
       <div>
         <label for="totalCash">Total Cash Available:</label>
-        <input type="number" id="totalCash" value="0" min="0" onblur="saveData()" />
+        <input type="number" id="totalCash" value="0" min="0" oninput="recalculatePayouts()" />
       </div>
       <div>
-        <label for="leaderPercent">Leader %</label>
-        <input type="number" id="leaderPercent" value="0" min="0" max="100" />
-      </div>
-      <button class="btn-purple" onclick="calcLeaderCut()">Calculate Leader Cut</button>
-      <span id="leaderPay">Leader Pay: $0 | Balance: $0</span>
-    </div>
-    
-    <div class="panel">
-      <div>
-        <label for="warPay">War Pay Per Respect:</label>
-        <input type="number" id="warPay" value="0" min="0" />
+        <label for="warCosts">War Costs:</label>
+        <input type="number" id="warCosts" value="0" min="0" oninput="recalculatePayouts()" />
       </div>
       <div>
-        <label for="chainPay">Chain Pay Per Hit:</label>
-        <input type="number" id="chainPay" value="0" min="0" />
+        <label for="leaderPercent">Leader %:</label>
+        <input type="number" id="leaderPercent" value="0" min="0" max="100" oninput="recalculatePayouts()" />
       </div>
       <div>
-        <label for="assistPay">Assist Pay Per Defend:</label>
-        <input type="number" id="assistPay" value="0" min="0" />
+        <label for="leaderPay">Leader Pay:</label>
+        <span id="leaderPay">$0</span>
+      </div>
+      <div>
+        <label for="memberBalance">Member Balance:</label>
+        <span id="memberBalance">$0</span>
       </div>
     </div>
 
+    <div class="payout-options">
+      <div>
+        <label for="payoutMethod">Payout Method:</label>
+        <select id="payoutMethod" onchange="recalculatePayouts()">
+          <option value="score">Based on Score</option>
+          <option value="attacks">Based on Attacks</option>
+          <option value="defends">Based on Defends</option>
+          <option value="equal">Equal Split</option>
+          <option value="custom">Custom Weights</option>
+        </select>
+      </div>
+      <div id="customWeightsContainer" style="display: none;">
+        <label for="scoreWeight">Score:</label>
+        <input type="number" id="scoreWeight" value="70" min="0" max="100" style="width: 70px;" oninput="recalculatePayouts()" />
+        <label for="attacksWeight">Attacks:</label>
+        <input type="number" id="attacksWeight" value="20" min="0" max="100" style="width: 70px;" oninput="recalculatePayouts()" />
+        <label for="defendsWeight">Defends:</label>
+        <input type="number" id="defendsWeight" value="10" min="0" max="100" style="width: 70px;" oninput="recalculatePayouts()" />
+      </div>
+      <button class="btn-info copy-btn" onclick="copyPayoutsToClipboard()">Copy Payouts</button>
+    </div>
+
     <div class="table-container">
-      <table id="payoutTable">
+      <table id="warTable">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Attacks</th>
-            <th>Chain Hits</th>
-            <th>Assists</th>
-            <th>Respect Gain</th>
-            <th>Respect Loss</th>
-            <th>Net Respect</th>
-            <th>Score</th>
-            <th>War Payout</th>
-            <th>Chain Payout</th>
-            <th>Assist Payout</th>
-            <th>Total</th>
-            <th>Actions</th>
+            <th data-sort="name">Name <span class="sort-icon"></span></th>
+            <th data-sort="score">Score <span class="sort-icon"></span></th>
+            <th data-sort="attacks">Attacks <span class="sort-icon"></span></th>
+            <th data-sort="defends">Defends <span class="sort-icon"></span></th>
+            <th data-sort="percent">Percent <span class="sort-icon"></span></th>
+            <th data-sort="payout">Payout <span class="sort-icon"></span></th>
           </tr>
         </thead>
-        <tbody><!-- Rows added dynamically --></tbody>
+        <tbody id="warTableBody">
+          <tr>
+            <td colspan="6" class="no-data">Load war data to see member contributions and payouts</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td><strong>Totals</strong></td>
+            <td id="totalScore">0</td>
+            <td id="totalAttacks">0</td>
+            <td id="totalDefends">0</td>
+            <td id="totalPercent">100%</td>
+            <td id="totalPayout">$0</td>
+          </tr>
+        </tfoot>
       </table>
-    </div>
-    
-    <div class="panel">
-      <button class="btn-success" onclick="addRow()">Add Row</button>
-      <button class="btn-gray" onclick="confirmClear()">Clear All</button>
-      <button class="btn-info" onclick="calculate()">Calculate Payouts</button>
-      <button class="btn-success" onclick="exportCSV()">Export to CSV</button>
-    </div>
-    
-    <div class="panel">
-      <p id="grandTotal"></p>
-      <p id="remainingBalance"></p>
     </div>
   </div>
 
   <script>
-    // Theme & UI helpers
-    const $ = id => document.getElementById(id);
-    const fmt = num => '$' + Number(num).toLocaleString('en-US', {maximumFractionDigits: 0});
-    const fmtNum = num => Number(num).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    
-    // Set theme based on user preference
-    (function setTheme() {
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) 
+    // Initialize dark mode based on user preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+      if (event.matches) {
         document.documentElement.classList.add('dark');
-      window.matchMedia('(prefers-color-scheme: dark)')
-        .addEventListener('change', e => document.documentElement.classList.toggle('dark', e.matches));
-    })();
-    
-    // UI Controls
-    const toggleApiKey = () => $('apiKeyInput').type = $('apiKeyInput').type === 'password' ? 'text' : 'password';
-    const showLoading = () => $('loadingOverlay').style.display = 'flex';
-    const hideLoading = () => $('loadingOverlay').style.display = 'none';
-    
-    function showStatus(message, isError = false) {
-      const status = $('statusDisplay');
-      status.textContent = message;
-      status.className = 'status ' + (isError ? 'error' : 'success');
-      setTimeout(() => status.style.display = 'none', 5000);
-    }
-    
-    function confirmClear() {
-      if (confirm('Clear all rows? This cannot be undone.')) clearAllRows();
-    }
-    
-    // Position & Tag helpers
-    const positionNames = ['', 'Leader', 'Co-leader', 'Officer', 'Member', 'New'];
-    
-    function getPosition(position) {
-      if (!position) return '';
-      return !isNaN(position) ? positionNames[parseInt(position)] || position : position;
-    }
-    
-    function getTags(position) {
-      if (!position) return [];
-      
-      if (!isNaN(position)) {
-        const posNum = parseInt(position);
-        const tags = ['leader', 'coleader', 'officer', 'member', 'new'];
-        return posNum >= 1 && posNum <= 5 ? [tags[posNum-1]] : [];
-      }
-      
-      position = position.toLowerCase();
-      if (position.includes('leader') && !position.includes('co')) return ['leader'];
-      if (position.includes('co-leader') || position.includes('coleader')) return ['coleader'];
-      if (position.includes('officer')) return ['officer'];
-      if (position.includes('member')) return ['member'];
-      if (position.includes('new')) return ['new'];
-      
-      return [];
-    }
-    
-    function createTagsHTML(tags) {
-      if (!tags || tags.length === 0) return '';
-      
-      let html = '<div class="player-tags">';
-      tags.forEach(tag => {
-        html += `<span class="tag tag-${tag}">${tag.charAt(0).toUpperCase() + tag.slice(1)}</span>`;
-      });
-      return html + '</div>';
-    }
-    
-    // Data management
-    function saveData() {
-      const rows = [], globals = {};
-      
-      document.querySelectorAll('#payoutTable tbody tr').forEach(row => {
-        rows.push({
-          name: row.cells[0].querySelector('.playerName').textContent,
-          position: row.cells[1].querySelector('input').value,
-          attacks: row.cells[2].querySelector('input').value,
-          chain_hits: row.cells[3].querySelector('input').value,
-          assists: row.cells[4].querySelector('input').value,
-          respect_gain: row.cells[5].querySelector('input').value,
-          respect_loss: row.cells[6].querySelector('input').value,
-          score: row.cells[8].querySelector('input').value,
-          tags: Array.from(row.cells[0].querySelectorAll('.tag')).map(t => t.className.replace('tag tag-', ''))
-        });
-      });
-      
-      // Save global values
-      ['totalCash', 'leaderPercent', 'warPay', 'chainPay', 'assistPay', 'apiKeyInput', 'factionIdInput']
-        .forEach(id => globals[id] = $(id).value);
-      
-      localStorage.setItem("tornPayoutData", JSON.stringify(rows));
-      localStorage.setItem("tornPayoutGlobals", JSON.stringify(globals));
-    }
-    
-    function loadData() {
-      // Load global values
-      const globals = JSON.parse(localStorage.getItem("tornPayoutGlobals") || '{}');
-      ['totalCash', 'leaderPercent', 'warPay', 'chainPay', 'assistPay', 'apiKeyInput', 'factionIdInput']
-        .forEach(id => $(id).value = globals[id] || (id === 'apiKeyInput' || id === 'factionIdInput' ? '' : '0'));
-      
-      // Load table rows
-      const rows = JSON.parse(localStorage.getItem("tornPayoutData") || '[]');
-      if (rows.length) {
-        rows.forEach(r => addRow(
-          r.name, r.position, r.attacks, r.chain_hits, r.assists,
-          r.respect_gain, r.respect_loss, r.score, r.tags || []
-        ));
       } else {
-        addRow(); // Add sample row
+        document.documentElement.classList.remove('dark');
       }
-      
-      calculate();
-      calcLeaderCut();
-    }
+    });
+
+    // Shorthand for getElementById
+    const $ = id => document.getElementById(id);
     
-    // Row management
-    function addRow(name = 'Player Name', position = '', attacks = 0, chain_hits = 0, assists = 0, 
-                   respect_gain = 0, respect_loss = 0, score = 0, tags = []) {
-      const tbody = document.querySelector('#payoutTable tbody');
-      const tr = document.createElement('tr');
-      
-      // Generate tags HTML
-      const tagsHTML = tags.length > 0 ? createTagsHTML(tags) : 
-                      position ? createTagsHTML(getTags(position)) : '';
-      
-      tr.innerHTML = `
-        <td>
-          <span class="playerName" contenteditable="true" onblur="saveData()">${name}</span>
-          ${tagsHTML}
-        </td>
-        <td><input type="text" value="${position}" onblur="updatePositionTag(this); saveData();" /></td>
-        <td><input type="number" value="${attacks}" min="0" onblur="saveData()"/></td>
-        <td><input type="number" value="${chain_hits}" min="0" onblur="saveData()"/></td>
-        <td><input type="number" value="${assists}" min="0" onblur="saveData()"/></td>
-        <td><input type="number" value="${respect_gain}" min="0" onblur="saveData()"/></td>
-        <td><input type="number" value="${respect_loss}" min="0" onblur="saveData()"/></td>
-        <td>${fmtNum(respect_gain - respect_loss)}</td>
-        <td><input type="number" value="${score}" onblur="saveData()" /></td>
-        <td>${fmt(0)}</td>
-        <td>${fmt(0)}</td>
-        <td>${fmt(0)}</td>
-        <td>${fmt(0)}</td>
-        <td>
-          <button class="btn-warning" onclick="clearRow(this)">Clear</button>
-          <button class="btn-danger" onclick="removeRow(this)">Remove</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-      saveData();
-    }
+    // Format number as currency
+    const fmt = num => '$' + Number(num).toLocaleString('en-US', {maximumFractionDigits: 0});
     
-    function updatePositionTag(input) {
-      const row = input.closest('tr');
-      const playerCell = row.cells[0];
-      const position = input.value;
-      
-      // Remove existing tags
-      const existingTags = playerCell.querySelector('.player-tags');
-      if (existingTags) playerCell.removeChild(existingTags);
-      
-      // Add new tags
-      if (position) {
-        const tags = getTags(position);
-        if (tags.length > 0) {
-          playerCell.insertAdjacentHTML('beforeend', createTagsHTML(tags));
+    // Store war data globally
+    let warData = [];
+    let currentSortField = 'score';
+    let currentSortDirection = 'desc';
+
+    // Handle sorting table by column
+    document.querySelectorAll('#warTable th[data-sort]').forEach(th => {
+      th.addEventListener('click', () => {
+        const field = th.getAttribute('data-sort');
+        if (field === currentSortField) {
+          currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          currentSortField = field;
+          currentSortDirection = 'desc';
         }
+        
+        // Update sort icons
+        document.querySelectorAll('.sort-icon').forEach(icon => icon.className = 'sort-icon');
+        th.querySelector('.sort-icon').className = `sort-icon ${currentSortDirection === 'asc' ? 'asc' : ''}`;
+        
+        sortAndDisplayTable();
+      });
+    });
+
+    // Initialize custom weights visibility based on payout method
+    $('payoutMethod').addEventListener('change', () => {
+      $('customWeightsContainer').style.display = 
+        $('payoutMethod').value === 'custom' ? 'block' : 'none';
+    });
+
+    // Load war data from Torn API
+    async function loadWar() {
+      if (!validateInputs()) return;
+      
+      showLoading();
+      try {
+        const apiKey = $('apiKeyInput').value.trim();
+        const factionId = $('factionIdInput').value.trim();
+        const warId = $('warIdInput').value.trim();
+        
+        let url = warId
+          ? `https://api.torn.com/war/${encodeURIComponent(warId)}/?selections=rankreport&key=${encodeURIComponent(apiKey)}`
+          : `https://api.torn.com/faction/${encodeURIComponent(factionId)}/?selections=war&key=${encodeURIComponent(apiKey)}`;
+        
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Network error: ${response.status}`);
+        
+        const data = await response.json();
+        if (data.error) throw new Error(`API Error: ${data.error.error}`);
+        
+        // Get players data depending on API endpoint used
+        let playersData = warId ? data.rankreport?.players : data.war?.lastwar?.players;
+        if (!playersData) throw new Error("No war data found.");
+        
+        // Transform data into our format
+        warData = Object.entries(playersData).map(([id, player]) => ({
+          id,
+          name: player.name || `Player ${id}`,
+          score: parseInt(player.score) || 0,
+          attacks: parseInt(player.attacks_won || player.wins || 0),
+          defends: parseInt(player.defends_lost || player.defends || 0),
+          percent: 0,
+          payout: 0
+        }));
+        
+        // Sort and display data
+        sortAndDisplayTable();
+        recalculatePayouts();
+        
+        showStatus(`Successfully loaded war data for ${warData.length} members.`);
+      } catch (error) {
+        console.error('Failed to load war data:', error);
+        showStatus(error.message, true);
+      } finally {
+        hideLoading();
       }
     }
-    
-    function clearRow(button) {
-      const row = button.closest('tr');
-      const inputs = row.querySelectorAll('input');
-      inputs.forEach(input => {
-        input.value = input.type === 'text' ? '' : 0;
-        if (input.parentElement.cellIndex === 1) updatePositionTag(input);
+
+    // Sort and display table data
+    function sortAndDisplayTable() {
+      if (!warData.length) return;
+      
+      // Sort the data
+      warData.sort((a, b) => {
+        let valA = a[currentSortField];
+        let valB = b[currentSortField];
+        
+        // Special handling for name field
+        if (currentSortField === 'name') {
+          return currentSortDirection === 'asc' 
+            ? valA.localeCompare(valB) 
+            : valB.localeCompare(valA);
+        }
+        
+        // Numeric comparison for other fields
+        return currentSortDirection === 'asc' ? valA - valB : valB - valA;
       });
       
-      // Reset calculated cells
-      row.cells[7].textContent = fmtNum(0);
-      row.cells[9].textContent = fmt(0);
-      row.cells[10].textContent = fmt(0);
-      row.cells[11].textContent = fmt(0);
-      row.cells[12].textContent = fmt(0);
-      saveData();
+      // Clear the table
+      const tbody = $('warTableBody');
+      tbody.innerHTML = '';
+      
+      // Populate with sorted data
+      warData.forEach(player => {
+        const row = document.createElement('tr');
+        
+        // Calculate percentage for progress bar
+        const maxScore = Math.max(...warData.map(p => p.score));
+        const scorePercentage = maxScore > 0 ? (player.score / maxScore * 100) : 0;
+        
+        row.innerHTML = `
+          <td>${player.name}</td>
+          <td>
+            ${player.score.toLocaleString()}
+            <div class="progress-bar" style="width: ${scorePercentage}%"></div>
+          </td>
+          <td>${player.attacks.toLocaleString()}</td>
+          <td>${player.defends.toLocaleString()}</td>
+          <td>${player.percent.toFixed(2)}%</td>
+          <td>${fmt(player.payout)}</td>
+        `;
+        tbody.appendChild(row);
+      });
+      
+      // Update totals
+      updateTotals();
     }
-    
-    function removeRow(button) {
-      if (confirm('Remove this row?')) {
-        button.closest('tr').remove();
-        saveData();
-        calculate();
+
+    // Update table footer totals
+    function updateTotals() {
+      const totalScore = warData.reduce((sum, player) => sum + player.score, 0);
+      const totalAttacks = warData.reduce((sum, player) => sum + player.attacks, 0);
+      const totalDefends = warData.reduce((sum, player) => sum + player.defends, 0);
+      const totalPayout = warData.reduce((sum, player) => sum + player.payout, 0);
+      
+      $('totalScore').textContent = totalScore.toLocaleString();
+      $('totalAttacks').textContent = totalAttacks.toLocaleString();
+      $('totalDefends').textContent = totalDefends.toLocaleString();
+      $('totalPercent').textContent = '100%';
+      $('totalPayout').textContent = fmt(totalPayout);
+    }
+
+    // Calculate and update payouts
+    function recalculatePayouts() {
+      if (!warData.length) return;
+      
+      // Get values from inputs
+      const totalCash = parseInt($('totalCash').value) || 0;
+      const warCosts = parseInt($('warCosts').value) || 0;
+      const leaderPercent = parseInt($('leaderPercent').value) || 0;
+      
+      // Calculate leader cut and member balance
+      const adjustedCash = Math.max(0, totalCash - warCosts);
+      const leaderCut = (leaderPercent / 100) * adjustedCash;
+      const memberBalance = adjustedCash - leaderCut;
+      
+      // Update display
+      $('leaderPay').textContent = fmt(leaderCut);
+      $('memberBalance').textContent = fmt(memberBalance);
+      
+      // Get payout method
+      const method = $('payoutMethod').value;
+      
+      // Calculate contribution percentages based on selected method
+      let totalContribution = 0;
+      
+      if (method === 'equal') {
+        // Equal split - everyone gets the same percentage
+        const equalPercent = warData.length > 0 ? (100 / warData.length) : 0;
+        warData.forEach(player => player.percent = equalPercent);
+      } else if (method === 'custom') {
+        // Custom weights for score, attacks, defends
+        const scoreWeight = parseInt($('scoreWeight').value) || 0;
+        const attacksWeight = parseInt($('attacksWeight').value) || 0;
+        const defendsWeight = parseInt($('defendsWeight').value) || 0;
+        
+        // Calculate weighted contribution for each player
+        const totalScore = warData.reduce((sum, p) => sum + p.score, 0);
+        const totalAttacks = warData.reduce((sum, p) => sum + p.attacks, 0);
+        const totalDefends = warData.reduce((sum, p) => sum + p.defends, 0);
+        
+        warData.forEach(player => {
+          let contribution = 0;
+          
+          if (totalScore > 0) contribution += (player.score / totalScore) * scoreWeight;
+          if (totalAttacks > 0) contribution += (player.attacks / totalAttacks) * attacksWeight;
+          if (totalDefends > 0) contribution += (player.defends / totalDefends) * defendsWeight;
+          
+          player.contribution = contribution;
+          totalContribution += contribution;
+        });
+      } else {
+        // Single metric payout (score, attacks, or defends)
+        const metric = method; // 'score', 'attacks', or 'defends'
+        totalContribution = warData.reduce((sum, p) => sum + p[metric], 0);
+        
+        warData.forEach(player => {
+          player.contribution = player[metric];
+        });
       }
-    }
-    
-    function clearAllRows() {
-      document.querySelectorAll('#payoutTable tbody tr').forEach(row => {
-        const button = row.querySelector('.btn-warning');
-        clearRow(button);
-      });
-      calculate();
-    }
-    
-    // Calculations
-    function calculate() {
-      const warPay = parseInt($('warPay').value) || 0;
-      const chainPay = parseInt($('chainPay').value) || 0;
-      const assistPay = parseInt($('assistPay').value) || 0;
-      const totalCash = parseInt($('totalCash').value) || 0;
-      const leaderPercent = parseInt($('leaderPercent').value) || 0;
-      const rows = document.querySelectorAll('#payoutTable tbody tr');
       
-      let grandTotal = 0;
-      
-      rows.forEach(row => {
-        // Get input values
-        const respect_gain = parseInt(row.cells[5].querySelector('input').value) || 0;
-        const respect_loss = parseInt(row.cells[6].querySelector('input').value) || 0;
-        const chain_hits = parseInt(row.cells[3].querySelector('input').value) || 0;
-        const assists = parseInt(row.cells[4].querySelector('input').value) || 0;
-        
-        // Calculate payouts
-        const netRespect = respect_gain - respect_loss;
-        row.cells[7].textContent = fmtNum(netRespect);
-        
-        const warPayout = netRespect * warPay;
-        const chainPayout = chain_hits * chainPay;
-        const assistPayout = assists * assistPay;
-        const totalPayout = warPayout + chainPayout + assistPayout;
-        
-        // Update cells
-        row.cells[9].textContent = fmt(warPayout);
-        row.cells[10].textContent = fmt(chainPayout);
-        row.cells[11].textContent = fmt(assistPayout);
-        row.cells[12].textContent = fmt(totalPayout);
-        
-        grandTotal += totalPayout;
+      // Calculate percentages and payouts
+      warData.forEach(player => {
+        if (method === 'equal') {
+          // Already set equal percentages above
+          player.payout = (player.percent / 100) * memberBalance;
+        } else {
+          // Calculate percentage based on contribution relative to total
+          player.percent = totalContribution > 0 
+            ? (player.contribution / totalContribution) * 100 
+            : 0;
+          player.payout = (player.percent / 100) * memberBalance;
+        }
       });
       
-      // Update summary
-      $('grandTotal').textContent = 'Total Payouts: ' + fmt(grandTotal);
-      
-      const leaderCut = (leaderPercent / 100) * totalCash;
-      const available = totalCash - leaderCut;
-      const remaining = available - grandTotal;
-      
-      $('remainingBalance').textContent = 'Remaining Balance: ' + fmt(remaining);
-      
-      saveData();
+      // Update the display
+      sortAndDisplayTable();
     }
-    
-    function calcLeaderCut() {
-      const totalCash = parseInt($('totalCash').value) || 0;
-      const leaderPercent = parseInt($('leaderPercent').value) || 0;
-      const leaderCut = (leaderPercent / 100) * totalCash;
-      const balance = totalCash - leaderCut;
-      
-      $('leaderPay').textContent = 'Leader Pay: ' + fmt(leaderCut) + ' | Balance: ' + fmt(balance);
-      calculate();
-    }
-    
-    // Export to CSV
-    function exportCSV() {
-      const rows = document.querySelectorAll('#payoutTable tbody tr');
-      if (!rows.length) {
-        showStatus('No data to export', true);
+
+    // Copy payouts to clipboard in a formatted way
+    function copyPayoutsToClipboard() {
+      if (!warData.length) {
+        showStatus('No payout data to copy', true);
         return;
       }
-
-      let csv = "Name,Position,Attacks,Chain Hits,Assists,Respect Gain,Respect Loss,Net Respect,Score,War Payout,Chain Payout,Assist Payout,Total Payout\n";
       
-      rows.forEach(row => {
-        const cols = [
-          row.cells[0].querySelector('.playerName').textContent,
-          row.cells[1].querySelector('input').value,
-          row.cells[2].querySelector('input').value,
-          row.cells[3].querySelector('input').value,
-          row.cells[4].querySelector('input').value,
-          row.cells[5].querySelector('input').value,
-          row.cells[6].querySelector('input').value,
-          row.cells[7].textContent,
-          row.cells[8].querySelector('input').value,
-          row.cells[9].textContent.replace(/[$,]/g, ''),
-          row.cells[10].textContent.replace(/[$,]/g, ''),
-          row.cells[11].textContent.replace(/[$,]/g, ''),
-          row.cells[12].textContent.replace(/[$,]/g, '')
-        ];
-        
-        csv += `"${cols[0]}",${cols.slice(1).join(',')}\n`;
+      // Sort by payout amount (highest first) for clipboard copy
+      const sortedData = [...warData].sort((a, b) => b.payout - a.payout);
+      
+      let text = "War Payout Details\n";
+      text += "==================\n\n";
+      
+      // Leader details if applicable
+      const leaderCut = parseInt($('leaderPay').textContent.replace(/[^\d]/g, '')) || 0;
+      if (leaderCut > 0) {
+        text += `Leader Cut: ${fmt(leaderCut)}\n`;
+      }
+      
+      text += `Member Balance: ${$('memberBalance').textContent}\n`;
+      text += `Payout Method: ${$('payoutMethod').options[$('payoutMethod').selectedIndex].text}\n\n`;
+      text += "Member Payouts:\n";
+      
+      // Add each member's payout
+      sortedData.forEach(player => {
+        text += `${player.name}: ${fmt(player.payout)} (${player.percent.toFixed(2)}%)\n`;
       });
       
-      const link = document.createElement('a');
-      link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-      link.download = 'torn_war_payouts.csv';
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      showStatus('CSV file exported successfully');
+      // Copy to clipboard
+      navigator.clipboard.writeText(text)
+        .then(() => showStatus('Payout data copied to clipboard'))
+        .catch(err => {
+          console.error('Failed to copy text: ', err);
+          showStatus('Failed to copy to clipboard', true);
+        });
     }
-    
-    // API integration
+
+    // Input validation
     function validateInputs() {
       const apiKey = $('apiKeyInput').value.trim();
       const factionId = $('factionIdInput').value.trim();
@@ -515,82 +544,42 @@
       
       return true;
     }
-    
-    async function loadWar() {
-      if (!validateInputs()) return;
-      
-      showLoading();
-      
-      try {
-        const apiKey = $('apiKeyInput').value.trim();
-        const factionId = $('factionIdInput').value.trim();
-        const warId = $('warIdInput').value.trim();
-        
-        const url = warId
-          ? `https://api.torn.com/war/${warId}/?selections=rankreport&key=${apiKey}`
-          : `https://api.torn.com/faction/${factionId}/?selections=war&key=${apiKey}`;
-        
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Network error: ${response.status}`);
-        
-        const data = await response.json();
-        if (data.error) throw new Error(`API Error: ${data.error.error}`);
-        
-        // Extract players from response based on API endpoint used
-        let players, warInfo;
-        if (warId) {
-          players = data.rankreport?.players;
-          warInfo = data.rankreport;
-        } else {
-          players = data.war?.lastwar?.players;
-          warInfo = data.war?.lastwar;
-        }
-        
-        if (!players) throw new Error("No war data found.");
-        
-        // Clear existing table
-        document.querySelector('#payoutTable tbody').innerHTML = "";
-        
-        // Add rows for each player
-        Object.entries(players).forEach(([id, p]) => {
-          // Map API fields to row data - use exact field names from API
-          // Different API endpoints may use different field names
-          const position = p.position !== undefined ? p.position : p.faction_position;
-          const respect_gain = p.respect_gain !== undefined ? p.respect_gain : p.respect_earned;
-          const respect_loss = p.respect_loss !== undefined ? p.respect_loss : p.respect_lost;
-          
-          addRow(
-            p.name || `Player ${id}`,
-            getPosition(position),
-            p.attacks || 0,
-            p.chain_hits || 0,
-            p.assists || 0, // Torn API uses "assists" for defends
-            respect_gain || 0,
-            respect_loss || 0, 
-            p.score || 0,
-            getTags(position)
-          );
-        });
-        
-        // Show war name if available
-        let warName = '';
-        if (warInfo) {
-          warName = warInfo.name || (warInfo.target ? `War against ${warInfo.target.name}` : '');
-        }
-        
-        showStatus(warName ? `Loaded: ${warName}` : 'War data loaded successfully');
-        calculate();
-        
-      } catch (error) {
-        console.error("Failed to load war data:", error);
-        showStatus(error.message, true);
-      } finally {
-        hideLoading();
-      }
+
+    // Show loading overlay
+    function showLoading() {
+      $('loadingOverlay').style.display = 'flex';
     }
-    
-    // Initialize on page load
-    window.onload = loadData;
+
+    // Hide loading overlay
+    function hideLoading() {
+      $('loadingOverlay').style.display = 'none';
+    }
+
+    // Show status message
+    function showStatus(message, isError = false) {
+      const status = $('statusDisplay');
+      status.textContent = message;
+      status.style.display = 'block';
+      status.style.color = isError ? 'var(--danger)' : 'var(--success)';
+      status.style.backgroundColor = isError ? 'rgba(244, 67, 54, 0.1)' : 'rgba(76, 175, 80, 0.1)';
+      status.style.border = `1px solid ${isError ? 'var(--danger)' : 'var(--success)'}`;
+      
+      setTimeout(() => (status.style.display = 'none'), 5000);
+    }
+
+    // Initialize by checking for saved values
+    document.addEventListener('DOMContentLoaded', () => {
+      // If API key is saved in URL hash (not recommended for production)
+      if (window.location.hash) {
+        try {
+          const params = new URLSearchParams(window.location.hash.substring(1));
+          if (params.has('apiKey')) $('apiKeyInput').value = params.get('apiKey');
+          if (params.has('factionId')) $('factionIdInput').value = params.get('factionId');
+        } catch (e) {
+          console.error('Error parsing URL parameters', e);
+        }
+      }
+    });
   </script>
 </body>
 </html>
